@@ -9,8 +9,11 @@ print_fcoe_uefi_conf()
     local mac dev vlan
     mac=$(get_fcoe_boot_mac "$1")
     [ -z "$mac" ] && return 1
-    dev=$(set_ifname fcoe $mac)
-    vlan=$(get_fcoe_boot_vlan  "$1")
+    dev=$(set_ifname fcoe "$mac")
+    vlan=$(get_fcoe_boot_vlan "$1")
+    if [ -z "$vlan" ]; then
+        return 1
+    fi
     if [ "$vlan" -ne "0" ]; then
         case "$vlan" in
             [0-9]*)
